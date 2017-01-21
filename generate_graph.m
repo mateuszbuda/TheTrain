@@ -73,13 +73,14 @@ railway = A;
 
 %% create HMM for observations generation
 
-p = 0.05;
+p = 0.05;   % probability of noisy observation
 
 TRANS = zeros(2 * N);   % odd states 2i-1 correspond to being in node i and
                         % arriving to it from edge 0, whereas
                         % even nodes 2i correspond to being in node i and
                         % arriving to it from edge L or R
-EMIS = ones(2 * N, 2) * p;
+                        
+EMIS = zeros(2 * N, 4);  % 4 observations: 0L, 0R, L0, R0
 
 for i = 1:N
     
@@ -94,7 +95,10 @@ for i = 1:N
             TRANS(2 * i - 1, 2 * j) = 1;
             
             EMIS(2 * i - 1, A(i, j) - 1) = 1 - p;
-            EMIS(2 * i, A(i, j) - 1) = 1 - p;
+            EMIS(2 * i - 1, 4 - A(i, j)) = p;
+            
+            EMIS(2 * i, A(i, j) + 1) = 1 - p;
+            EMIS(2 * i, 6 - A(i, j)) = p;
             
         end
         

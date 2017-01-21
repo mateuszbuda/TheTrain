@@ -23,35 +23,22 @@ end
 
 N = 2 * size;
 
-%% generate 3-regular graph 
+%% generate random 3-regular graph 
 
-A = zeros(N);
-
-j = 1;
-for i = 1:N
-    
-    for k = 1:(3 - sum(A(i, :)))
-        
-        j = j + 1;
-        if j > N
-            j = i + 1;
-        end
-        
-        A(i, j) = 1;
-        A(j, i) = 1;
-        
-    end
-    
-end
+A = random_graph(N, 0, 0, 'sequence', ones(1, N) * 3);
 
 %% set L, R and 0 directions
 
 for i = 1:N
     
+    s = randperm(3);
+    k = 1;
+    
     for j = 1:N
         
         if A(i, j) ~= 0
-            A(i, j) = sum(A(i, :)) - A(i, j);
+            A(i, j) = s(k);
+            k = k + 1;
         end
         
         if sum(A(i, :)) == 6

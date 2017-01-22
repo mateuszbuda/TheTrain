@@ -1,7 +1,7 @@
-function [ G, railway, TRANS, EMIS ] = generate_graph( size, ratio )
+function [ G, railway, TRANS, EMIS ] = generate_graph( nodes, ratio )
 %GENERATE_GRAPH Generates railway graph of given size and L to R ratio
 %   parameters:
-%   size - the number of switches will be 2*size as there must be even
+%   nodes - the number of switches will be 2*nodes as there must be even
 %   number of them
 %   ratio - the probability of setting swich to R
 %   returns:
@@ -11,17 +11,17 @@ function [ G, railway, TRANS, EMIS ] = generate_graph( size, ratio )
 %   TRANS, EMIS - HMM for observations generation
 
 if nargin < 1
-    size = 6;
+    nodes = 6;
     type = 'random';
 elseif nargin < 2
     type = 'random';
 end
 
-if size < 2
-    size = 2;
+if nodes < 2
+    nodes = 2;
 end
 
-N = 2 * size;
+N = 2 * nodes;
 
 %% generate random 3-regular graph 
 
@@ -105,5 +105,13 @@ for i = 1:N
     end
     
 end
+
+%% add uniform initial state probability
+
+initial = ones(1, 2 * N) / (2 * N);
+
+TRANS = [0 initial; zeros(size(TRANS, 1), 1) TRANS];
+
+EMIS = [zeros(1, size(EMIS, 2)); EMIS];
 
 

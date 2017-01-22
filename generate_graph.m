@@ -3,7 +3,7 @@ function [ G, railway, TRANS, EMIS ] = generate_graph( nodes, ratio )
 %   parameters:
 %   nodes - the number of switches will be 2*nodes as there must be even
 %   number of them
-%   ratio - the probability of setting swich to R
+%   ratio - the probability of setting swich to L
 %   returns:
 %   G - graph matrix
 %   railway - graph matrix with wieghts corresponding to deirections: 
@@ -55,9 +55,7 @@ G = A;
 
 %% set switches
 
-setting = binornd(ones(N, 1), ones(N, 1) * 0.5);    % random
-% setting = binornd(ones(N, 1), ones(N, 1));        % all right
-% setting = binornd(ones(N, 1), zeros(N, 1));       % all left
+setting = binornd(ones(N, 1), ones(N, 1) * ratio);
 railway = set_switches(G, setting);
 
 % figure;

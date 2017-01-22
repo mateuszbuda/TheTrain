@@ -17,13 +17,7 @@ decay_step = 2 * numel(initial);    % multiply alpha by alpha_decay every
 
 theta = initial;
 
-setting = binornd(ones(d, 1), theta);
-railway = set_switches(G, setting);
-[TRANS, EMIS] = railway2hmm(railway);
-
-[~, logpseq] = hmmdecode(obs, TRANS, EMIS, 'Symbols', symbols);
-
-likelihood = exp(logpseq);
+lik = likelihood(theta, G, obs, symbols);
 
 for i = 1:nmax
     
@@ -34,20 +28,14 @@ for i = 1:nmax
 
     new_theta = max(zeros(d, 1), min(ones(d, 1), new_theta));
     
-    setting = binornd(ones(d, 1), theta);
-    railway = set_switches(G, setting);
-    [TRANS, EMIS] = railway2hmm(railway);
+    new_lik = likelihood(new_theta, G, obs, symbols);
     
-    [~, logpseq] = hmmdecode(obs, TRANS, EMIS, 'Symbols', symbols);
-    
-    new_likelihood = exp(logpseq);
-    
-    acceptance_prob = max(1, new_likelihood / likelihood);
+    acceptance_prob = new_lik / lik;
     accept = rand() < acceptance_prob;
     
     if accept
         theta = new_theta;
-        likelihood = new_likelihood;
+        lik = new_lik;
     end
     
 %     if mod(i, decay_step) == 0

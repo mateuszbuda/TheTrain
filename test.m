@@ -2,4 +2,4 @@
 
 plot(digraph(railway), 'EdgeLabel', digraph(railway).Edges.Weight);
 
-generate_obs(10, TRANS, EMIS)
+[obs, states] = generate_obs(10, TRANS, EMIS)

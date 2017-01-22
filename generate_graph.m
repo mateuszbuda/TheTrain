@@ -55,63 +55,16 @@ G = A;
 
 %% set switches
 
-for i = 1:N
-    
-    if rand(1) < ratio
-        s = 2;
-    else
-        s = 3;
-    end
-    
-    A(i, A(i, :) == s) = 0;
-    
-end
+setting = binornd(ones(N, 1), ones(N, 1) * 0.5);    % random
+% setting = binornd(ones(N, 1), ones(N, 1));        % all right
+% setting = binornd(ones(N, 1), zeros(N, 1));       % all left
+railway = set_switches(G, setting);
 
-railway = A;
 % figure;
 % plot(railway, 'EdgeLabel', railway.Edges.Weight);
 
 %% create HMM for observations generation
 
-p = 0.05;   % probability of noisy observation
-
-TRANS = zeros(2 * N);   % odd states 2i-1 correspond to being in node i and
-                        % arriving to it from edge 0, whereas
-                        % even nodes 2i correspond to being in node i and
-                        % arriving to it from edge L or R
-                        
-EMIS = zeros(2 * N, 4);  % 4 observations: 0L, 0R, L0, R0
-
-for i = 1:N
-    
-    for j = 1:N
-        
-        if A(i, j) == 1
-            
-            TRANS(2 * i, 2 * j - 1) = 1;
-            
-        elseif A(i, j) > 1 % either 2 ('L') or 3 ('R')
-            
-            TRANS(2 * i - 1, 2 * j) = 1;
-            
-            EMIS(2 * i - 1, A(i, j) - 1) = 1 - p;
-            EMIS(2 * i - 1, 4 - A(i, j)) = p;
-            
-            EMIS(2 * i, A(i, j) + 1) = 1 - p;
-            EMIS(2 * i, 6 - A(i, j)) = p;
-            
-        end
-        
-    end
-    
-end
-
-%% add uniform initial state probability
-
-initial = ones(1, 2 * N) / (2 * N);
-
-TRANS = [0 initial; zeros(size(TRANS, 1), 1) TRANS];
-
-EMIS = [zeros(1, size(EMIS, 2)); EMIS];
+[TRANS, EMIS] = railway2hmm(railway);
 
 

@@ -1,10 +1,14 @@
-N = 6;
+N = 8;
 
 symbols = {'0L' '0R' 'L0' 'R0'};
 
 
-[G, railway, TRANS, EMIS] = generate_graph(N / 2, 0.5);
+[A, G, railway, TRANS, EMIS] = generate_graph(N / 2, 0.5);
 
+figure;
+plot(graph(A));
+
+figure;
 plot(digraph(railway), 'EdgeLabel', digraph(railway).Edges.Weight);
 
 
@@ -14,6 +18,6 @@ plot(digraph(railway), 'EdgeLabel', digraph(railway).Edges.Weight);
 mu = ones(1, N) * 0.5;
 sigma = ones(1, N) * 0.1;
 initial = mvnrnd(mu, sigma)';
-nmax = 1000;
+nmax = 2000;
 
 theta = mcmc(initial, nmax, obs, G, symbols)

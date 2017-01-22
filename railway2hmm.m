@@ -28,8 +28,7 @@ for i = 1:N
             EMIS(2 * i - 1, railway(i, j) - 1) = 1 - p;
             EMIS(2 * i - 1, 4 - railway(i, j)) = p;
             
-            EMIS(2 * i, railway(i, j) + 1) = 1 - p;
-            EMIS(2 * i, 6 - railway(i, j)) = p;
+            EMIS(2 * i, railway(i, j) + 1) = 1;
             
         end
         
@@ -37,9 +36,10 @@ for i = 1:N
     
 end
 
-%% add uniform initial state probability
+%% add uniform initial state probability for odd states
 
-initial = ones(1, 2 * N) / (2 * N);
+initial = ones(1, 2 * N) / N;
+initial(2:2:N) = 0;
 
 TRANS = [0 initial; zeros(size(TRANS, 1), 1) TRANS];
 

@@ -7,7 +7,7 @@ function [ l ] = likelihood( theta, G, obs, symbols )
 
 d = numel(theta);
 
-nmax = 12;
+nmax = 22;
 
 loglikelihood = zeros(1, nmax);
 

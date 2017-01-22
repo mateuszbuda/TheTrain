@@ -1,13 +1,14 @@
-function [ G, railway, TRANS, EMIS ] = generate_graph( nodes, ratio )
+function [ A, G, railway, TRANS, EMIS ] = generate_graph( nodes, ratio )
 %GENERATE_GRAPH Generates railway graph of given size and L to R ratio
 %   parameters:
 %   nodes - the number of switches will be 2*nodes as there must be even
 %   number of them
 %   ratio - the probability of setting swich to L
 %   returns:
-%   G - graph matrix
-%   railway - graph matrix with wieghts corresponding to deirections: 
+%   A - graph matrix
+%   G - graph matrix with wieghts corresponding to deirections: 
 %       1 - 0; 2 - L; 3 - R.
+%   railway - grapth with switches set
 %   TRANS, EMIS - HMM for observations generation
 
 if nargin < 1
@@ -29,6 +30,8 @@ A = random_graph(N, 0, 0, 'sequence', ones(1, N) * 3);
 
 %% set L, R and 0 directions
 
+G = A;
+
 for i = 1:N
     
     s = randperm(3);
@@ -36,12 +39,12 @@ for i = 1:N
     
     for j = 1:N
         
-        if A(i, j) ~= 0
-            A(i, j) = s(k);
+        if G(i, j) ~= 0
+            G(i, j) = s(k);
             k = k + 1;
         end
         
-        if sum(A(i, :)) == 6
+        if sum(G(i, :)) == 6
             break;
         end
         
@@ -49,7 +52,6 @@ for i = 1:N
     
 end
 
-G = A;
 % figure;
 % plot(G);
 

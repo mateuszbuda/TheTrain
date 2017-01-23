@@ -28,7 +28,8 @@ for i = 1:N
             EMIS(2 * i - 1, railway(i, j) - 1) = 1 - p;
             EMIS(2 * i - 1, 4 - railway(i, j)) = p;
             
-            EMIS(2 * i, railway(i, j) + 1) = 1;
+            EMIS(2 * i, railway(i, j) + 1) = 1 - p;
+            EMIS(2 * i, 6 - railway(i, j)) = p;
             
         end
         

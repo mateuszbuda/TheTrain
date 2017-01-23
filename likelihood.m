@@ -1,11 +1,11 @@
-function [ l ] = likelihood( theta, G, obs, symbols )
+function [ l ] = likelihood( sigma, G, obs, symbols )
 %LIKELIHOOD Likelihood of multivariate model with parameters theta for
 %switch setting generation given railway graph and observations sequence.
 %   Samples switches setting from theta and computes probability of
 %   generating observation sequence for all generated railways and then
 %   averages the results.
 
-d = numel(theta);
+d = numel(sigma);
 
 nmax = 22;
 
@@ -13,7 +13,7 @@ loglikelihood = zeros(1, nmax);
 
 for i = 1:nmax
 
-    setting = binornd(ones(d, 1), theta);
+    setting = binornd(ones(d, 1), sigma);
     railway = set_switches(G, setting);
     [TRANS, EMIS] = railway2hmm(railway);
 

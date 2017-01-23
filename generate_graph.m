@@ -11,13 +11,6 @@ function [ A, G, railway, TRANS, EMIS ] = generate_graph( nodes, ratio )
 %   railway - grapth with switches set
 %   TRANS, EMIS - HMM for observations generation
 
-if nargin < 1
-    nodes = 6;
-    type = 'random';
-elseif nargin < 2
-    type = 'random';
-end
-
 if nodes < 2
     nodes = 2;
 end

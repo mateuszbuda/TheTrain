@@ -40,7 +40,7 @@ end
 %% add uniform initial state probability for odd states
 
 initial = ones(1, 2 * N) / N;
-initial(2:2:N) = 0;
+initial(2:2:2 * N) = 0;
 
 TRANS = [0 initial; zeros(size(TRANS, 1), 1) TRANS];
 

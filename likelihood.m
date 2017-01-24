@@ -7,7 +7,7 @@ function [ l ] = likelihood( sigma, G, obs, symbols )
 
 d = numel(sigma);
 
-nmax = 22;
+nmax = 12;
 
 loglikelihood = zeros(1, nmax);
 

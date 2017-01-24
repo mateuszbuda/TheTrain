@@ -10,7 +10,7 @@ function [ sigma ] = mcmc( initial, nmax, obs, G, symbols )
 
 d = numel(initial);
 
-alpha = 0.1;                        % step size
+alpha = 0.1;	% step size
 
 sigma = initial;
 best_sigma = sigma;
@@ -20,10 +20,9 @@ best_lik = lik;
 
 for i = 1:nmax
     
-    k = mod(i, d) + 1;
+    k = randi(d, 1);
     new_sigma = sigma;
-    new_sigma(k) = normrnd(sigma(k), alpha);        % change one param
-%     new_theta = normrnd(theta, ones(d, 1) * alpha); % change all params
+    new_sigma(k) = normrnd(sigma(k), alpha);    % change one param
 
     new_sigma = max(zeros(d, 1), min(ones(d, 1), new_sigma));
     

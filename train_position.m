@@ -6,16 +6,15 @@ N = size(G, 1);
 
 mu = ones(1, N) * 0.5;
 sigma = ones(1, N) * 0.1;
-initial = mvnrnd(mu, sigma);
-nmax = 100;
+initial = mvnrnd(mu, sigma)';
+nmax = 1000;
 
 sigma_mvnbin = mcmc(initial, nmax, obs, G, symbols);
 
 S = zeros(1, N); % probabilities of stop positions
 
 D = 0:2^N - 1;
-
-B = de2bi(D);
+B = de2bi(D);   % entire sigma space
 
 for i = 1:size(B, 1) % for each sigma (switches setting)
     
@@ -23,21 +22,26 @@ for i = 1:size(B, 1) % for each sigma (switches setting)
     
     psigma = prod(binopdf(sigma, ones(N, 1), sigma_mvnbin));
     
-    pobs = likelihood(sigma, G, obs, symbols);
+    if psigma == 0
+        continue;
+    end
     
     railway = set_switches(G, sigma);
     [TRANS, EMIS] = railway2hmm(railway);
-    PSTATES = hmmdecode(obs, TRANS, EMIS, 'Symbols', symbols);
+    [PSTATES, logpobs] = hmmdecode(obs, TRANS, EMIS, 'Symbols', symbols);
+    
+    pobs = exp(logpobs);
     
     for s = 1:N
         
-        pstateobs = PSTATES(2 * s) ...  % corresponds to arriving at node s via edge 0
-            + PSTATES(2 * s + 1);       % corresponds to arriving at node s via edge L or R
+        pstateobs = PSTATES(2 * s, end) ...  % corresponds to arriving at node s via edge 0
+            + PSTATES(2 * s + 1, end);       % corresponds to arriving at node s via edge L or R
         
         S(s) = S(s) + (pstateobs * psigma / pobs);
         
     end
     
-    S = S / norm(S, 1);
-    
 end
+
+S = S / norm(S, 1);
+    

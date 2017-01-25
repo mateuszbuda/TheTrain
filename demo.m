@@ -4,18 +4,24 @@ N = 6;
 
 symbols = {'0L' '0R' 'L0' 'R0'};
 
-
+[A, G, railway, TRANS, EMIS] = generate_graph(N / 2, 0.5);
 % [A, G, railway, TRANS, EMIS] = test_graph_1();
 % [A, G, railway, TRANS, EMIS] = test_graph_2();
-[A, G, railway, TRANS, EMIS] = generate_graph(N / 2, 0.5);
 
 
 figure;
-plot(graph(A));
+subplot(1, 2, 1);
+plot(graph(A), 'Layout', 'circle');
+
+set(gca, 'XTickLabel', '');
+set(gca, 'YTickLabel', '');
 
 
-figure;
+subplot(1, 2, 2);
 plot(digraph(railway), 'EdgeLabel', digraph(railway).Edges.Weight);
+
+set(gca, 'XTickLabel', '');
+set(gca, 'YTickLabel', '');
 
 
 [obs, states] = generate_obs(20, TRANS, EMIS, symbols)
